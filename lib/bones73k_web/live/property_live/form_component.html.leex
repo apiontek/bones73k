@@ -7,38 +7,32 @@
 
   <div class="modal-body">
 
-    <div class="mb-3" phx-feedback-for="<%= input_id(f, :name)%>">
-      <%= label f, :name, class: "form-label" %>
-      <div class="input-group has-validation">
-        <%= text_input f, :name,
-            class: input_class(f, :name, "form-control"),
-            aria_describedby: error_id(f, :name)
-          %>
-        <%= error_tag f, :name %>
-      </div>
+    <%= label f, :name, class: "form-label" %>
+    <div class="mb-3" phx-feedback-for="<%= input_id(f, :name) %>">
+      <%= text_input f, :name,
+          class: input_class(f, :name, "form-control"),
+          aria_describedby: error_ids(f, :name)
+        %>
+      <%= error_tag f, :name %>
     </div>
 
-    <div class="mb-3" phx-feedback-for="<%= input_id(f, :price)%>">
-      <%= label f, :price, class: "form-label" %>
-      <div class="input-group has-validation">
-        <%= number_input f, :price,
-            class: input_class(f, :price, "form-control"),
-            step: "any",
-            aria_describedby: error_id(f, :price)
-          %>
-        <%= error_tag f, :price %>
-      </div>
+    <%= label f, :price, class: "form-label" %>
+    <div class="mb-3" phx-feedback-for="<%= input_id(f, :price) %>">
+      <%= number_input f, :price,
+          class: input_class(f, :price, "form-control"),
+          step: "any",
+          aria_describedby: error_ids(f, :price)
+        %>
+      <%= error_tag f, :price %>
     </div>
 
-    <div class="mb-3" phx-feedback-for="<%= input_id(f, :description)%>">
-      <%= label f, :description, class: "form-label" %>
-      <div class="input-group has-validation">
-        <%= textarea f, :description,
-            class: input_class(f, :description, "form-control"),
-            aria_describedby: error_id(f, :description)
-          %>
-        <%= error_tag f, :description %>
-      </div>
+    <%= label f, :description, class: "form-label" %>
+    <div class="mb-3" phx-feedback-for="<%= input_id(f, :description) %>">
+      <%= textarea f, :description,
+          class: input_class(f, :description, "form-control"),
+          aria_describedby: error_ids(f, :description)
+        %>
+      <%= error_tag f, :description %>
     </div>
 
   </div>

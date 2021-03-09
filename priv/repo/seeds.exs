@@ -53,9 +53,9 @@ count_to_take = 123
 mock_users = users_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
 
 mock_users = ~s([
-      {"email":"adam@73k.us","password":"adamadam","role":"admin","inserted_at":"2018-12-14T01:01:01Z","confirmed_at":true},
-      {"email":"karen@73k.us","password":"karenkaren","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
-      {"email":"kat@73k.us","password":"katkat","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
+      {"email":"adam@73k.us","password":"adamadamA1","role":"admin","inserted_at":"2018-12-14T01:01:01Z","confirmed_at":true},
+      {"email":"karen@73k.us","password":"karenkarenA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
+      {"email":"kat@73k.us","password":"katkatA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
     ]) |> Jason.decode!() |> Enum.concat(mock_users)
 
 mock_users =
