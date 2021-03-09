@@ -42,8 +42,62 @@
 
 </div>
 
-<%# main data table %>
-<div class="table-responsive">
+<%# mobile data cards %>
+<div class="d-block d-sm-none">
+
+
+  <%= if !@page do %>
+    <div class="card">
+      <div class="spinner-border text-primary my-5 mx-auto" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  <% else %>
+    <%= for user <- @page.entries do %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9"><%= user.email %></dd>
+            <dt class="col-sm-3">Role</dt>
+            <dd class="col-sm-9"><%= user.role |> Atom.to_string() |> String.capitalize() %></dd>
+            <dt class="col-sm-3">Created at</dt>
+            <dd class="col-sm-9"><%= dt_out(user.inserted_at) %></dd>
+            <dt class="col-sm-3">
+              Confirmed?
+              <%= if user.confirmed_at do %>
+                <span class="visually-hidden">Yes</span>
+                <%= icon_div @socket, "bi-check", [class: "icon baseline fs-4 text-success"], [role: "img", aria_hidden: false] %>
+              <% else %>
+                <span class="visually-hidden">No</span>
+                <%= icon_div @socket, "bi-x", [class: "icon baseline fs-4 text-warning"], [role: "img", aria_hidden: false] %>
+              <% end %>
+            </dt>
+          </dl>
+
+          <%= if Roles.can?(@current_user, user, :edit) do %>
+            <%= live_patch to: Routes.user_management_index_path(@socket, :edit, user.id, Enum.into(@query, [])), class: "btn btn-outline-primary btn-sm text-nowrap" do %>
+              <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+              Edit
+            <% end %>
+          <% end %>
+
+          <%= if Roles.can?(@current_user, user, :delete) do %>
+            <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= user.id %>">
+              <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+              Delete
+            </button>
+          <% end %>
+
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+</div>
+
+<%# non-mobile main data table %>
+<div class="table-responsive d-none d-sm-block">
   <table class="table">
 
     <thead>
