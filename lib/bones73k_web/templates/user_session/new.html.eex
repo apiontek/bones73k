@@ -15,7 +15,6 @@
       </div>
     <% end %>
 
-
     <%= label f, :email, class: "form-label" %>
     <div class="inner-addon left-addon mb-3">
       <%= icon_div @conn, "bi-at", [class: "icon is-left text-muted fs-5"] %>
@@ -37,7 +36,6 @@
         %>
       <span class="invalid-feedback">password is required</span>
     </div>
-
 
     <div class="form-check mb-3 no-valid-style">
       <%= checkbox f, :remember_me, class: "form-check-input" %>

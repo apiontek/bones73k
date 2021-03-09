@@ -52,14 +52,17 @@ count_to_take = 123
 
 mock_users = users_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
 
-mock_users = ~s([
-      {"email":"adam@73k.us","password":"adamadamA1","role":"admin","inserted_at":"2018-12-14T01:01:01Z","confirmed_at":true},
-      {"email":"karen@73k.us","password":"karenkarenA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
-      {"email":"kat@73k.us","password":"katkatA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
-    ]) |> Jason.decode!() |> Enum.concat(mock_users)
+extra_mock_users = ~s([
+  {"email":"adam@73k.us","password":"adamadamA1","role":"admin","inserted_at":"2018-12-14T01:01:01Z","confirmed_at":true},
+  {"email":"karen@73k.us","password":"karenkarenA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
+  {"email":"kat@73k.us","password":"katkatA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
+])
 
 mock_users =
-  Enum.map(mock_users, fn e ->
+  extra_mock_users
+  |> Jason.decode!()
+  |> Enum.concat(mock_users)
+  |> Enum.map(fn e ->
     add_dt = NaiveDateTime.from_iso8601!(e["inserted_at"])
 
     %{
@@ -112,12 +115,14 @@ props_json = Path.join(this_path, "MOCK_DATA_properties.json")
 
 count_to_take = 123
 
-mock_props = props_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
-
 random_user_query = from User, order_by: fragment("RANDOM()"), limit: 1
 
 mock_props =
-  Enum.map(mock_props, fn e ->
+  props_json
+  |> File.read!()
+  |> Jason.decode!()
+  |> Enum.take_random(count_to_take)
+  |> Enum.map(fn e ->
     add_dt = NaiveDateTime.from_iso8601!(e["inserted_at"])
     rand_user = Repo.one(random_user_query)
 
