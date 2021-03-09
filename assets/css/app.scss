@@ -41,17 +41,17 @@
 }
 
 /* style icon */
-.inner-addon .icon {
+.inner-addon > .icon {
   position: absolute;
   padding: 0.5625rem 0.5rem;
   pointer-events: none;
 }
 
 /* align icon */
-.inner-addon .icon.is-left {
+.inner-addon > .icon.is-left {
   left: 0px;
 }
-.inner-addon .icon.is-right {
+.inner-addon > .icon.is-right {
   right: 0px;
 }
 
