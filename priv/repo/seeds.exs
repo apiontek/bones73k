@@ -22,7 +22,7 @@ alias Bones73k.Properties.Property
 {:ok, admin} =
   Accounts.register_user(%{
     email: "admin@company.com",
-    password: "123456789abc",
+    password: "123456789abC",
     password_confirmation: "123456789abc",
     role: Accounts.registration_role()
   })
@@ -30,7 +30,7 @@ alias Bones73k.Properties.Property
 {:ok, user_1} =
   Accounts.register_user(%{
     email: "user1@company.com",
-    password: "123456789abc",
+    password: "123456789abC",
     password_confirmation: "123456789abc",
     role: Accounts.registration_role()
   })
@@ -38,7 +38,7 @@ alias Bones73k.Properties.Property
 {:ok, user_2} =
   Accounts.register_user(%{
     email: "user2@company.com",
-    password: "123456789abc",
+    password: "123456789abC",
     password_confirmation: "123456789abc",
     role: Accounts.registration_role()
   })

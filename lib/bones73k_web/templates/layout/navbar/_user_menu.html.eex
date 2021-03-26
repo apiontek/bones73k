@@ -1,12 +1,3 @@
-<%= if !@current_user do %>
-
-  <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light") do %>
-    <%= icon_div @conn, "bi-door-open", [class: "icon baseline"] %>
-    Log in
-  <% end %>
-
-<% else %>
-
 <li class="nav-item dropdown">
 
   <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownUserMenu" data-bs-toggle="dropdown" aria-expanded="false">
@@ -43,5 +34,3 @@
   </ul>
 
 </li>
-
-<% end %>
