@@ -48,11 +48,10 @@ defmodule Bones73k.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:ecto_enum, "~> 1.4"},
       {:bamboo, "~> 2.0"},
       {:bamboo_smtp, "~> 4.0"},
       {:scrivener_ecto, "~> 2.0"},
-      {:timex, "~> 3.5"}
+      {:tzdata, "~> 1.1"}
     ]
   end
 

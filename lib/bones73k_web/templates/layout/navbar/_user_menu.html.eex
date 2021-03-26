@@ -1,7 +1,7 @@
 <%= if !@current_user do %>
 
   <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light") do %>
-    <%= icon_div @conn, "bi-door-open", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+    <%= icon_div @conn, "bi-door-open", [class: "icon baseline"] %>
     Log in
   <% end %>
 

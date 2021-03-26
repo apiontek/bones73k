@@ -1,15 +1,12 @@
 defmodule Bones73k.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-  import EctoEnum
 
   @roles [
     user: "Basic user level",
     manager: "Can create users, update user emails & passwords",
     admin: "Can delete users and change user roles"
   ]
-
-  defenum(RolesEnum, :role, Keyword.keys(@roles))
 
   @max_email 254
   @min_password 6
@@ -23,8 +20,8 @@ defmodule Bones73k.Accounts.User do
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
+    field :role, Ecto.Enum, values: Keyword.keys(@roles), default: :user
 
-    field :role, RolesEnum, default: :user
     timestamps()
   end
 
@@ -73,21 +70,10 @@ defmodule Bones73k.Accounts.User do
     |> validate_password_not_required(opts)
   end
 
-  # def update_changeset_no_pw(user, attrs) do
-  #   user
-  #   |> cast(attrs, [:email, :role])
-  #   |> validate_role()
-  #   |> validate_email()
-  # end
-
-  defp role_validator(:role, role) do
-    (RolesEnum.valid_value?(role) && []) || [role: "invalid user role"]
-  end
-
   defp validate_role(changeset) do
     changeset
     |> validate_required([:role])
-    |> validate_change(:role, &role_validator/2)
+    |> validate_inclusion(:role, Keyword.keys(@roles), message: "invalid user role")
   end
 
   defp validate_email_format(changeset) do
@@ -115,9 +101,11 @@ defmodule Bones73k.Accounts.User do
   defp validate_password_not_required(changeset, opts) do
     changeset
     |> validate_length(:password, min: @min_password, max: @max_password)
-    # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
-    # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
+    |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/,
+      message: "at least one digit or punctuation character"
+    )
     |> maybe_hash_password(opts)
   end
 

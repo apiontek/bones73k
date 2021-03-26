@@ -3,7 +3,6 @@ defmodule Bones73kWeb.UserManagementLive.Index do
 
   import Ecto.Query
   import Bones73kWeb.Pagination
-  import Bones73k.Util.Dt
 
   alias Bones73k.Repo
   alias Bones73k.Accounts
@@ -27,9 +26,8 @@ defmodule Bones73kWeb.UserManagementLive.Index do
     if Roles.can?(current_user, user, live_action) do
       socket
       |> assign(:query, query_map(params))
-      |> assign_modal_return_to()
+      |> assign_modal_close_handlers()
       |> assign(:delete_user, nil)
-      |> assign(:page, nil)
       |> request_page_query()
       |> apply_action(socket.assigns.live_action, params)
       |> live_noreply()
@@ -64,9 +62,9 @@ defmodule Bones73kWeb.UserManagementLive.Index do
     |> assign(:user, Accounts.get_user!(id))
   end
 
-  def assign_modal_return_to(%{assigns: %{query: query}} = socket) do
+  defp assign_modal_close_handlers(%{assigns: %{query: query}} = socket) do
     to = Routes.user_management_index_path(socket, :index, Enum.into(query, []))
-    assign(socket, :modal_return_to, to)
+    assign(socket, modal_return_to: to, modal_close_action: :return)
   end
 
   defp user_from_params(params)
@@ -97,7 +95,10 @@ defmodule Bones73kWeb.UserManagementLive.Index do
 
   @impl true
   def handle_event("delete-modal", %{"id" => id}, socket) do
-    {:noreply, assign(socket, :delete_user, Accounts.get_user(id))}
+    socket
+    |> assign(:modal_close_action, :delete_user)
+    |> assign(:delete_user, Accounts.get_user!(id))
+    |> live_noreply()
   end
 
   @impl true
@@ -113,17 +114,13 @@ defmodule Bones73kWeb.UserManagementLive.Index do
   end
 
   @impl true
-  def handle_event(
-        "sort-change",
-        %{"sort_by" => column} = params,
-        %{assigns: %{query: query}} = socket
-      ) do
-    (column == query.sort_by &&
-       send(
-         self(),
-         {:query_update, %{"sort_order" => (query.sort_order == "asc" && "desc") || "asc"}}
-       )) ||
+  def handle_event("sort-change", %{"sort_by" => column} = params, socket) do
+    if column == socket.assigns.query.sort_by do
+      order = (socket.assigns.query.sort_order == "asc" && "desc") || "asc"
+      send(self(), {:query_update, %{"sort_order" => order}})
+    else
       send(self(), {:query_update, Map.put(params, "sort_order", "asc")})
+    end
 
     {:noreply, socket}
   end
@@ -168,8 +165,20 @@ defmodule Bones73kWeb.UserManagementLive.Index do
   end
 
   @impl true
-  def handle_info({:close_modal, _}, %{assigns: %{modal_return_to: to}} = socket) do
-    socket |> copy_flash() |> push_patch(to: to) |> live_noreply()
+  def handle_info({:close_modal, _}, %{assigns: %{modal_close_action: :return}} = socket) do
+    socket
+    |> copy_flash()
+    |> push_patch(to: socket.assigns.modal_return_to)
+    |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:close_modal, _}, %{assigns: %{modal_close_action: assign_key}} = socket) do
+    socket
+    |> assign(assign_key, nil)
+    |> assign_modal_close_handlers()
+    |> request_page_query()
+    |> live_noreply()
   end
 
   @impl true
@@ -187,5 +196,9 @@ defmodule Bones73kWeb.UserManagementLive.Index do
     ]
   end
 
-  def dt_out(ndt), do: format_ndt(ndt, "{YYYY} {Mshort} {0D}, {h12}:{0m} {am}")
+  def dt_out(ndt) do
+    ndt
+    |> DateTime.from_naive!(Bones73k.app_time_zone())
+    |> Calendar.strftime("%Y %b %-d, %-I:%M %p")
+  end
 end
