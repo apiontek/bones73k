@@ -24,7 +24,7 @@ defmodule Bones73kWeb.Endpoint do
   plug(Plug.Static,
     at: "/",
     from: :bones73k,
-    gzip: false,
+    gzip: true,
     only: ~w(css fonts images js favicon.ico robots.txt)
   )
 
