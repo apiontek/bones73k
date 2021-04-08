@@ -1,7 +1,7 @@
 defmodule Bones73k.Mailer.UserEmail do
   import Bamboo.Email
 
-  @mailer_vars Application.get_env(:bones73k, :app_global_vars,
+  @mailer_vars Application.compile_env(:bones73k, :app_global_vars,
                  mailer_reply_to: "admin@example.com",
                  mailer_from: {"Bones73k", "bones73k@example.com"}
                )
