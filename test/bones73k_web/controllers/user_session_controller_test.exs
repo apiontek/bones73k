@@ -11,9 +11,10 @@ defmodule Bones73kWeb.UserSessionControllerTest do
     test "renders log in page", %{conn: conn} do
       conn = get(conn, Routes.user_session_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "\n    Log in\n  </h2>"
-      assert response =~ "Register\n</a>"
-      assert response =~ "Log in\n</a>"
+      assert response =~ "Log in</h2>"
+      assert response =~ "Log in</button>"
+      assert response =~ "Register</a>"
+      assert response =~ "Forgot your password?</a>"
     end
 
     test "redirects if already logged in", %{conn: conn, user: user} do
@@ -61,7 +62,7 @@ defmodule Bones73kWeb.UserSessionControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ "\n    Log in\n  </h2>"
+      assert response =~ "Log in</h2>"
       assert response =~ "Invalid email or password"
     end
   end
@@ -108,7 +109,7 @@ defmodule Bones73kWeb.UserSessionControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ "\n    Log in\n  </h2>"
+      assert response =~ "Log in</h2>"
       assert response =~ "Invalid email or password"
     end
   end
